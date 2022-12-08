@@ -1,4 +1,5 @@
 import javafx.application.Application;
+import javafx.concurrent.Task;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -60,6 +61,7 @@ public class App extends Application {
         GridPane.setConstraints(mageHP, 3, 0);
         ToggleButton mage = new ToggleButton("Mage");
         GridPane.setConstraints(mage, 2, 0);
+        mage.requestFocus();
 
         warriorHP = new Label("" + heroes.warriorHitPoints);
         GridPane.setConstraints(warriorHP, 3, 1);
@@ -91,9 +93,8 @@ public class App extends Application {
 
 
         Scene scene = new Scene(grid, 400, 400);
-    //   scene.getStylesheets().add("/Catmodities/Resources/Style/style.css");     
-      window.setScene(scene); 
-      window.show();
+        window.setScene(scene); 
+        window.show();
 
         mage.setOnAction(e -> {
             heroesSelected = 0;
@@ -135,7 +136,7 @@ public class App extends Application {
             mobLabel.setText("Skele");
             skeleHP.setText("" + mobs.skeleHitPoints);
             hitAmountLabel.setText("" + hitAmount);
-            // mobFight();
+            delay(1500, () -> mobFight());
         });
 
         zombie.setOnAction(e -> {
@@ -157,7 +158,7 @@ public class App extends Application {
             mobLabel.setText("Zombie");
             zombieHP.setText("" + mobs.zombieHitPoints);
             hitAmountLabel.setText("" + hitAmount);
-            // mobFight();
+            delay(1500, () -> mobFight());
         });
 
         vampire.setOnAction(e -> {
@@ -180,16 +181,16 @@ public class App extends Application {
             vampireHP.setText("" + mobs.vampireHitPoints);
             hitAmountLabel.setText("" + hitAmount);
             System.out.println("First");
-            mobFight();
+            delay(1500, () -> mobFight());
         });
 
         nextRound.setOnAction(e -> {
             // System.out.println("First");
-            try {
-                TimeUnit.SECONDS.sleep(2);
-            } catch (InterruptedException e1) {
-                e1.printStackTrace();
-            }
+            // try {
+            //     TimeUnit.SECONDS.sleep(2);
+            // } catch (InterruptedException e1) {
+            //     e1.printStackTrace();
+            // }
             // System.out.println("Second");
             mobFight();
         });
@@ -197,8 +198,6 @@ public class App extends Application {
     }
 
     void mobFight(){
-        wait(2000);
-        System.out.println("Second");
         // Object[] fightDetails = new Object[3];
         List <FightInfo> fightDetails = new ArrayList<>();
         fightDetails = fight.mobBattle();
@@ -219,9 +218,6 @@ public class App extends Application {
         mageHP.setText("" + heroes.mageHitPoints);
         warriorHP.setText("" + heroes.warriorHitPoints);
         archerHP.setText("" + heroes.archerHitPoints);
-        // mobLabel.setText("" + fightDetails[0] + " hit");
-        // heroLabel.setText("" + fightDetails[1]);
-        // hitAmountLabel.setText("" + fightDetails[2]);
         mobLabel.setText("" + mobChoice);
         heroLabel.setText("" + heroChoice);
         if (damage < 1){
@@ -229,23 +225,19 @@ public class App extends Application {
         } else {
         hitAmountLabel.setText("" + damage);
         }
-
-        // System.out.println(fightDetails[0]);
-        // System.out.println(fightDetails[1]);
-        // System.out.println(fightDetails[2]);
     }
 
-    public static void wait(int ms){
-    // try{
-    //     Thread.sleep(ms);
-    // }
-    // catch(InterruptedException ex){
-    //     Thread.currentThread().interrupt();
-    // }
-    try {
-        TimeUnit.SECONDS.sleep(2);
-    } catch (InterruptedException e1) {
-        e1.printStackTrace();
-    }
-}
+
+public static void delay(long millis, Runnable continuation) {
+    Task<Void> sleeper = new Task<Void>() {
+        @Override
+        protected Void call() throws Exception {
+            try { Thread.sleep(millis); }
+            catch (InterruptedException e) { }
+            return null;
+        }
+    };
+    sleeper.setOnSucceeded(event -> continuation.run());
+    new Thread(sleeper).start();
+  }
 }
