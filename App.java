@@ -7,16 +7,19 @@ import javafx.scene.layout.*;
 import javafx.geometry.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class App extends Application {
 
     Stage window;
     int heroesSelected;
     Fight fight = new Fight();
-    Label mobLabel;
-    Label heroLabel;
+    Label attackerLabel;
+    Label attackedLabel;
     Label hitAmountLabel;
     Label mageHP;
     Label warriorHP;
@@ -24,6 +27,9 @@ public class App extends Application {
     Button zombie;
     Button skele;
     Button vampire;
+    Button mage;
+    Button warrior;
+    Button archer;
 
     public static void main(String[] args) {
         launch(args);
@@ -49,50 +55,55 @@ public class App extends Application {
         GridPane.setConstraints(skeleHP, 0, 0);
         skele = new Button("Skele");
         GridPane.setConstraints(skele, 1, 0);
+        skele.setId("mobbutton");
 
         Label zombieHP = new Label("" + mobs.zombieHitPoints);
         GridPane.setConstraints(zombieHP, 0, 1);
         zombie = new Button("Zombie");
         GridPane.setConstraints(zombie, 1, 1);
+        zombie.setId("mobbutton");
 
         Label vampireHP = new Label("" + mobs.vampireHitPoints);
         GridPane.setConstraints(vampireHP, 0, 2);
         vampire = new Button("Vampire");
         GridPane.setConstraints(vampire, 1, 2);
+        vampire.setId("mobbutton");
 
         mageHP = new Label("" + heroes.mageHitPoints);
         GridPane.setConstraints(mageHP, 3, 0);
-        ToggleButton mage = new ToggleButton("Mage");
+        mage = new Button("Mage");
         GridPane.setConstraints(mage, 2, 0);
-        mage.requestFocus();
+        mage.setId("herobutton");
 
         warriorHP = new Label("" + heroes.warriorHitPoints);
         GridPane.setConstraints(warriorHP, 3, 1);
-        ToggleButton warrior = new ToggleButton("Warrior");
+        warrior = new Button("Warrior");
         GridPane.setConstraints(warrior, 2, 1);
+        warrior.setId("herobutton");
 
         archerHP = new Label("" + heroes.archerHitPoints);
         GridPane.setConstraints(archerHP, 3, 2);
-        ToggleButton archer = new ToggleButton("Archer");
+        archer = new Button("Archer");
         GridPane.setConstraints(archer, 2, 2);
+        archer.setId("herobutton");
 
         Label hitLabel = new Label("Hit Amount: ");
         GridPane.setConstraints(hitLabel, 1, 3);
         hitAmountLabel = new Label();
         GridPane.setConstraints(hitAmountLabel, 2, 3);
 
-        mobLabel = new Label();
-        GridPane.setConstraints(mobLabel, 1, 4);
+        attackerLabel = new Label();
+        GridPane.setConstraints(attackerLabel, 1, 4);
 
-        heroLabel = new Label();
-        GridPane.setConstraints(heroLabel, 2, 4);
+        attackedLabel = new Label();
+        GridPane.setConstraints(attackedLabel, 2, 4);
 
         Button nextRound = new Button("Next");
         GridPane.setConstraints(nextRound, 1, 5);
 
-        grid.getChildren().addAll(skele, skeleHP, zombie, zombieHP, vampire, vampireHP, mage, mageHP, warrior, warriorHP, archer, archerHP, hitLabel, hitAmountLabel, mobLabel, heroLabel, nextRound);
+        grid.getChildren().addAll(skele, skeleHP, zombie, zombieHP, vampire, vampireHP, mage, mageHP, warrior, warriorHP, archer, archerHP, hitLabel, hitAmountLabel, attackerLabel, attackedLabel, nextRound);
 
-        mage.setSelected(true);
+        // mage.setSelected(true);
 
 
         Scene scene = new Scene(grid, 400, 400);
@@ -100,27 +111,23 @@ public class App extends Application {
         window.show();
         scene.getStylesheets().add("style.css");
 
-        ResetMobButtons();
-
         mage.setOnAction(e -> {
             heroesSelected = 0;
-            mage.setSelected(true);
-            warrior.setSelected(false);
-            archer.setSelected(false);
+            mage.setStyle("-fx-background-color: purple; -fx-text-fill: white;");
+            attackerLabel.setText("Mage hits");
         });
 
         warrior.setOnAction(e -> {
             heroesSelected = 1;
-            warrior.setSelected(true);
-            mage.setSelected(false);
-            archer.setSelected(false);
+            warrior.setStyle("-fx-background-color: purple; -fx-text-fill: white;");
+            attackerLabel.setText("Warrior hits");
+
         });
 
         archer.setOnAction(e -> {
             heroesSelected = 2;
-            archer.setSelected(true);
-            mage.setSelected(false);
-            warrior.setSelected(false);
+            archer.setStyle("-fx-background-color: purple; -fx-text-fill: white;");
+            attackerLabel.setText("Archer hits");
         });
 
         skele.setOnAction(e -> {
@@ -129,20 +136,18 @@ public class App extends Application {
             switch (heroesSelected){
                 case 0:
                     hitAmount = fight.heroBattle(mage.getText(), skele.getText());
-                    heroLabel.setText("Mage");
                     break;
                 case 1:
                     hitAmount = fight.heroBattle(warrior.getText(), skele.getText());
-                    heroLabel.setText("Warrior");
                     break;
                 case 2:
                     hitAmount = fight.heroBattle(archer.getText(), skele.getText());
-                    heroLabel.setText("Archer");
                     break;
             }
-            mobLabel.setText("Skele");
+            attackedLabel.setText("Skele");
             skeleHP.setText("" + mobs.skeleHitPoints);
-            hitAmountLabel.setText("" + hitAmount);
+            CheckForMiss(hitAmount);
+            disableButtons();
             delay(1500, () -> mobFight());
         });
 
@@ -152,21 +157,21 @@ public class App extends Application {
             switch (heroesSelected){
                 case 0:
                     hitAmount = fight.heroBattle(mage.getText(), zombie.getText());
-                    heroLabel.setText("Mage");
+
                     break;
                 case 1:
                     hitAmount = fight.heroBattle(warrior.getText(), zombie.getText());
-                    heroLabel.setText("Warrior");
+
                     break;
                 case 2:
                     hitAmount = fight.heroBattle(archer.getText(), zombie.getText());
-                    heroLabel.setText("Archer");
+
                     break;
             }
-            mobLabel.setText("Zombie");
+            attackedLabel.setText("Zombie");
             zombieHP.setText("" + mobs.zombieHitPoints);
-            System.out.println(mobs.zombieHitPoints);
-            hitAmountLabel.setText("" + hitAmount);
+            CheckForMiss(hitAmount);
+            disableButtons();
             delay(1500, () -> mobFight());
         });
 
@@ -176,20 +181,26 @@ public class App extends Application {
             switch (heroesSelected){
                 case 0:
                     hitAmount = fight.heroBattle(mage.getText(), vampire.getText());
-                    heroLabel.setText("Mage");
+
                     break;
                 case 1:
                     hitAmount = fight.heroBattle(warrior.getText(), vampire.getText());
-                    heroLabel.setText("Warrior");
+
                     break;
                 case 2:
                     hitAmount = fight.heroBattle(archer.getText(), vampire.getText());
-                    heroLabel.setText("Archer");
+
                     break;
             }
-            mobLabel.setText("Vampire");
+            attackedLabel.setText("Vampire");
             vampireHP.setText("" + mobs.vampireHitPoints);
-            hitAmountLabel.setText("" + hitAmount);
+            // if (hitAmount != 0){
+            //     hitAmountLabel.setText("" + hitAmount);
+            //     } else {
+            //         hitAmountLabel.setText("Miss");
+            //     }
+            CheckForMiss(hitAmount);
+            disableButtons();
             delay(1500, () -> mobFight());
         });
 
@@ -208,13 +219,12 @@ public class App extends Application {
 
     void mobFight(){
         // Object[] fightDetails = new Object[3];
-        ResetMobButtons();
+        ResetButtons();
         List <FightInfo> fightDetails = new ArrayList<>();
         fightDetails = fight.mobBattle();
 
         String mobChoice = "";
         String heroChoice = "";
-        String damageString = "Miss";
         int damage = 0;
 
 
@@ -224,17 +234,30 @@ public class App extends Application {
             damage = info.getDamage();
         }
 
+        // List<FightInfo> finfo = Arrays.asList(fightDetails);
+        // Stream<FightInfo> fightStream = Stream.of(fightDetails);
+        // fightDetails.map(FightInfo::getMobChoice).forEach(System.out::println);
+        List<FightInfo> fino = fightDetails.stream().
+        List<FightInfo> fino = fightDetails.stream().filter(FightInfo::isTrue).collect(Collectors.toList());
+
+        fino.forEach(System.out::println);
+
         Heroes heroes = Heroes.getHeroesInstance();
         mageHP.setText("" + heroes.mageHitPoints);
         warriorHP.setText("" + heroes.warriorHitPoints);
         archerHP.setText("" + heroes.archerHitPoints);
-        mobLabel.setText("" + mobChoice);
-        heroLabel.setText("" + heroChoice);
-        if (damage < 1){
-            hitAmountLabel.setText(damageString);
-        } else {
-        hitAmountLabel.setText("" + damage);
-        }
+        attackerLabel.setText("" + mobChoice + " hits");
+        attackedLabel.setText("" + heroChoice);
+
+        CheckForMiss(damage);
+    }
+
+    void CheckForMiss(int hitAmount){
+        if (hitAmount != 0){
+            hitAmountLabel.setText("" + hitAmount);
+            } else {
+                hitAmountLabel.setText("Miss");
+            }
     }
 
 
@@ -251,9 +274,28 @@ public static void delay(long millis, Runnable continuation) {
     new Thread(sleeper).start();
   }
 
-  public void ResetMobButtons(){
+  public void ResetButtons(){
     zombie.setStyle("-fx-background-color: darkslateblue; -fx-text-fill: white;");
     skele.setStyle("-fx-background-color: darkslateblue; -fx-text-fill: white;");
     vampire.setStyle("-fx-background-color: darkslateblue; -fx-text-fill: white;");
+    mage.setStyle("-fx-background-color: green; -fx-text-fill: white;");
+    warrior.setStyle("-fx-background-color: green; -fx-text-fill: white;");
+    archer.setStyle("-fx-background-color: green; -fx-text-fill: white;");
+    skele.setDisable(false);
+    zombie.setDisable(false);
+    vampire.setDisable(false);
+    mage.setDisable(false);
+    warrior.setDisable(false);
+    archer.setDisable(false);
+  }
+
+  public void disableButtons(){
+    skele.setDisable(true);
+    zombie.setDisable(true);
+    vampire.setDisable(true);
+    mage.setDisable(true);
+    warrior.setDisable(true);
+    archer.setDisable(true);
+
   }
 }
