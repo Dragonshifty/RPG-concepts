@@ -1,9 +1,9 @@
-class FightInfo {
+class MobList {
     private String heroChoice;
     private String mobChoice;
     private int damage;
 
-    public FightInfo(String mobChoice, String heroChoice, int damage){
+    public MobList(String mobChoice, String heroChoice, int damage){
         if (heroChoice == null || mobChoice == null){
             throw new NullPointerException();
         }
@@ -22,9 +22,5 @@ class FightInfo {
 
     public int getDamage(){
         return damage;
-    }
-
-    public boolean isTrue(){
-        return true;
     }
 }

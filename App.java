@@ -31,6 +31,19 @@ public class App extends Application {
     Button warrior;
     Button archer;
 
+    boolean mageTurn;
+    boolean warriorTurn;
+    boolean archerTurn;
+    boolean mageOut;
+    boolean warriorOut;
+    boolean archerOut;
+    boolean skeleOut;
+    boolean zombieOut;
+    boolean vampireOut;
+
+    Heroes heroes = Heroes.getHeroesInstance();
+    Mobs mobs = Mobs.getMobsInstance();
+
     public static void main(String[] args) {
         launch(args);
      }
@@ -41,8 +54,8 @@ public class App extends Application {
         window.setTitle("SA");
 
         // Heroes heroes = new Heroes();
-        Heroes heroes = Heroes.getHeroesInstance();
-        Mobs mobs = Mobs.getMobsInstance();
+        // Heroes heroes = Heroes.getHeroesInstance();
+        // Mobs mobs = Mobs.getMobsInstance();
         
 
         GridPane grid = new GridPane();
@@ -136,18 +149,21 @@ public class App extends Application {
             switch (heroesSelected){
                 case 0:
                     hitAmount = fight.heroBattle(mage.getText(), skele.getText());
+                    mageTurn = true;
                     break;
                 case 1:
                     hitAmount = fight.heroBattle(warrior.getText(), skele.getText());
+                    warriorTurn = true;
                     break;
                 case 2:
                     hitAmount = fight.heroBattle(archer.getText(), skele.getText());
+                    archerTurn = true;
                     break;
             }
             attackedLabel.setText("Skele");
             skeleHP.setText("" + mobs.skeleHitPoints);
             CheckForMiss(hitAmount);
-            disableButtons();
+            disableButtons(true);
             delay(1500, () -> mobFight());
         });
 
@@ -157,21 +173,21 @@ public class App extends Application {
             switch (heroesSelected){
                 case 0:
                     hitAmount = fight.heroBattle(mage.getText(), zombie.getText());
-
+                    mageTurn = true;
                     break;
                 case 1:
                     hitAmount = fight.heroBattle(warrior.getText(), zombie.getText());
-
+                    warriorTurn = true;
                     break;
                 case 2:
                     hitAmount = fight.heroBattle(archer.getText(), zombie.getText());
-
+                    archerTurn = true;
                     break;
             }
             attackedLabel.setText("Zombie");
             zombieHP.setText("" + mobs.zombieHitPoints);
             CheckForMiss(hitAmount);
-            disableButtons();
+            disableButtons(true);
             delay(1500, () -> mobFight());
         });
 
@@ -181,15 +197,15 @@ public class App extends Application {
             switch (heroesSelected){
                 case 0:
                     hitAmount = fight.heroBattle(mage.getText(), vampire.getText());
-
+                    mageTurn = true;
                     break;
                 case 1:
                     hitAmount = fight.heroBattle(warrior.getText(), vampire.getText());
-
+                    warriorTurn = true;
                     break;
                 case 2:
                     hitAmount = fight.heroBattle(archer.getText(), vampire.getText());
-
+                    archerTurn = true;
                     break;
             }
             attackedLabel.setText("Vampire");
@@ -200,7 +216,7 @@ public class App extends Application {
             //         hitAmountLabel.setText("Miss");
             //     }
             CheckForMiss(hitAmount);
-            disableButtons();
+            disableButtons(true);
             delay(1500, () -> mobFight());
         });
 
@@ -237,10 +253,10 @@ public class App extends Application {
         // List<FightInfo> finfo = Arrays.asList(fightDetails);
         // Stream<FightInfo> fightStream = Stream.of(fightDetails);
         // fightDetails.map(FightInfo::getMobChoice).forEach(System.out::println);
-        List<FightInfo> fino = fightDetails.stream().
-        List<FightInfo> fino = fightDetails.stream().filter(FightInfo::isTrue).collect(Collectors.toList());
+        // List<FightInfo> fino = fightDetails.stream().
+        // List<FightInfo> fino = fightDetails.stream().filter(FightInfo::isTrue).collect(Collectors.toList());
 
-        fino.forEach(System.out::println);
+        // fino.forEach(System.out::println);
 
         Heroes heroes = Heroes.getHeroesInstance();
         mageHP.setText("" + heroes.mageHitPoints);
@@ -289,13 +305,49 @@ public static void delay(long millis, Runnable continuation) {
     archer.setDisable(false);
   }
 
-  public void disableButtons(){
-    skele.setDisable(true);
-    zombie.setDisable(true);
-    vampire.setDisable(true);
-    mage.setDisable(true);
-    warrior.setDisable(true);
-    archer.setDisable(true);
-
+  public void disableButtons(boolean check){
+    if (!skeleOut) skele.setDisable(check);
+    if (!zombieOut) zombie.setDisable(check);
+    if (!vampireOut) vampire.setDisable(check);
+    if (!mageOut) mage.setDisable(check);
+    if (!warriorOut) warrior.setDisable(check);
+    if (!archerOut) archer.setDisable(check);
   }
+
+  public void TurnCheck(){
+    if (mageTurn && warriorTurn && archerTurn){
+        disableButtons(false);
+        return;
+    } 
+    if (mageTurn){
+        mage.setDisable(true);
+    }  
+    if (warriorTurn){
+        warrior.setDisable(true);
+    } 
+    if (archerTurn){
+        archer.setDisable(true);
+    }
+  }
+
+  public void HealthCheck(){
+    if (mobs.skeleHitPoints < 1){
+        skeleOut = true;
+        skele.setDisable(true);
+    } 
+    if (mobs.zombieHitPoints < 1){
+        zombieOut = true;
+        zombie.setDisable(true);
+    } 
+    if (mobs.vampireHitPoints < 1){
+        vampireOut = true;
+        vampire.setDisable(true);
+    } 
+    if (heroes.mageHitPoints < 1){
+        mageOut = true;
+        mage.setDisable(true);
+    } if (heroes)
+  }
+
+
 }

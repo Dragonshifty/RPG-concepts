@@ -1,30 +1,30 @@
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Mobs {
-    protected int skeleHitPoints = 15;
-    protected int skeleAttackMin = 5;
-    protected int skeleAttackMax = 10;
-    protected int skeleDefenceMin = 3;
-    protected int skeleDefenceMax = 6;
+    public int skeleHitPoints = 15;
+    public int skeleAttackMin = 5;
+    public int skeleAttackMax = 10;
+    public int skeleDefenceMin = 3;
+    public int skeleDefenceMax = 6;
 
-    protected int zombieHitPoints = 15;
-    protected int zombieAttackMin = 5;
-    protected int zombieAttackMax = 8;
-    protected int zombieDefenceMin = 3;
-    protected int zombieDefenceMax = 6;
+    public int zombieHitPoints = 15;
+    public int zombieAttackMin = 5;
+    public int zombieAttackMax = 8;
+    public int zombieDefenceMin = 3;
+    public int zombieDefenceMax = 6;
 
-    protected int vampireHitPoints = 20;
-    protected int vampireAttackMin = 5;
-    protected int vampireAttackMax = 15;
-    protected int vampireDefenceMin = 3;
-    protected int vampireDefenceMax = 6;
+    public int vampireHitPoints = 20;
+    public int vampireAttackMin = 5;
+    public int vampireAttackMax = 15;
+    public int vampireDefenceMin = 3;
+    public int vampireDefenceMax = 6;
 
-    protected int skeleAttackRoll;
-    protected int skeleDefenceRoll;
-    protected int zombieAttackRoll;
-    protected int zombieDefenceRoll;
-    protected int vampireAttackRoll;
-    protected int vampireDefenceRoll;
+    public int skeleAttackRoll;
+    public int skeleDefenceRoll;
+    public int zombieAttackRoll;
+    public int zombieDefenceRoll;
+    public int vampireAttackRoll;
+    public int vampireDefenceRoll;
 
     private Mobs() {}
 

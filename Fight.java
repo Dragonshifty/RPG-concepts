@@ -16,14 +16,17 @@ public class Fight {
                 switch (mob){
                     case "Skele":
                         hitAmount = (heroes.mageAttackRoll - mobs.skeleDefenceRoll);
+                        hitAmount = (hitAmount < 0) ? 0 : hitAmount;
                         mobs.skeleHitPoints -= hitAmount;
                         break;
                     case "Zombie":
                         hitAmount = (heroes.mageAttackRoll - mobs.zombieDefenceRoll);
+                        hitAmount = (hitAmount < 0) ? 0 : hitAmount;
                         mobs.zombieHitPoints -= hitAmount;
                         break;
                     case "Vampire":
                         hitAmount = (heroes.mageAttackRoll - mobs.zombieDefenceRoll);
+                        hitAmount = (hitAmount < 0) ? 0 : hitAmount;
                         mobs.vampireHitPoints -= hitAmount;
                         break;
                 }
@@ -32,14 +35,17 @@ public class Fight {
                 switch (mob){
                     case "Skele":
                         hitAmount = (heroes.warriorAttackRoll - mobs.skeleDefenceRoll);
+                        hitAmount = (hitAmount < 0) ? 0 : hitAmount;
                         mobs.skeleHitPoints -= hitAmount;
                         break;
                     case "Zombie":
                         hitAmount = (heroes.warriorAttackRoll - mobs.zombieDefenceRoll);
+                        hitAmount = (hitAmount < 0) ? 0 : hitAmount;
                         mobs.zombieHitPoints -= hitAmount;
                         break;
                     case "Vampire":
                         hitAmount = (heroes.warriorAttackRoll - mobs.zombieDefenceRoll);
+                        hitAmount = (hitAmount < 0) ? 0 : hitAmount;
                         mobs.vampireHitPoints -= hitAmount;
                         break;
                 }
@@ -48,14 +54,17 @@ public class Fight {
                 switch (mob){
                     case "Skele":
                         hitAmount = (heroes.archerAttackRoll - mobs.skeleDefenceRoll);
+                        hitAmount = (hitAmount < 0) ? 0 : hitAmount;
                         mobs.skeleHitPoints -= hitAmount;
                         break;
                     case "Zombie":
                         hitAmount = (heroes.archerAttackRoll - mobs.zombieDefenceRoll);
+                        hitAmount = (hitAmount < 0) ? 0 : hitAmount;
                         mobs.zombieHitPoints -= hitAmount;
                         break;
                     case "Vampire":
                         hitAmount = (heroes.archerAttackRoll - mobs.zombieDefenceRoll);
+                        hitAmount = (hitAmount < 0) ? 0 : hitAmount;
                         mobs.vampireHitPoints -= hitAmount;
                         break;
                 }
