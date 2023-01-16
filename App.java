@@ -34,12 +34,13 @@ public class App extends Application {
     boolean mageTurn;
     boolean warriorTurn;
     boolean archerTurn;
-    boolean mageOut;
-    boolean warriorOut;
-    boolean archerOut;
-    boolean skeleOut;
-    boolean zombieOut;
-    boolean vampireOut;
+    
+    static boolean mageOut;
+    static boolean warriorOut;
+    static boolean archerOut;
+    static boolean skeleOut;
+    static boolean zombieOut;
+    static boolean vampireOut;
 
     Heroes heroes = Heroes.getHeroesInstance();
     Mobs mobs = Mobs.getMobsInstance();
@@ -210,11 +211,6 @@ public class App extends Application {
             }
             attackedLabel.setText("Vampire");
             vampireHP.setText("" + mobs.vampireHitPoints);
-            // if (hitAmount != 0){
-            //     hitAmountLabel.setText("" + hitAmount);
-            //     } else {
-            //         hitAmountLabel.setText("Miss");
-            //     }
             CheckForMiss(hitAmount);
             disableButtons(true);
             delay(1500, () -> mobFight());
@@ -236,6 +232,7 @@ public class App extends Application {
     void mobFight(){
         // Object[] fightDetails = new Object[3];
         ResetButtons();
+        HealthCheck();
         List <FightInfo> fightDetails = new ArrayList<>();
         fightDetails = fight.mobBattle();
 
@@ -243,29 +240,35 @@ public class App extends Application {
         String heroChoice = "";
         int damage = 0;
 
-
-        for (FightInfo info : fightDetails){
-            mobChoice = info.getMobChoice();
-            heroChoice = info.getHeroChoice();
-            damage = info.getDamage();
+        if (fightDetails != null){
+            for (FightInfo info : fightDetails){
+                mobChoice = info.getMobChoice();
+                heroChoice = info.getHeroChoice();
+                damage = info.getDamage();
+            }
+    
+            // List<FightInfo> finfo = Arrays.asList(fightDetails);
+            // Stream<FightInfo> fightStream = Stream.of(fightDetails);
+            // fightDetails.map(FightInfo::getMobChoice).forEach(System.out::println);
+            // List<FightInfo> fino = fightDetails.stream().
+            // List<FightInfo> fino = fightDetails.stream().filter(FightInfo::isTrue).collect(Collectors.toList());
+    
+            // fino.forEach(System.out::println);
+    
+            Heroes heroes = Heroes.getHeroesInstance();
+            mageHP.setText("" + heroes.mageHitPoints);
+            warriorHP.setText("" + heroes.warriorHitPoints);
+            archerHP.setText("" + heroes.archerHitPoints);
+            attackerLabel.setText("" + mobChoice + " hits");
+            attackedLabel.setText("" + heroChoice);
+    
+            CheckForMiss(damage);
+        } else {
+            System.out.println("Game Over");
         }
 
-        // List<FightInfo> finfo = Arrays.asList(fightDetails);
-        // Stream<FightInfo> fightStream = Stream.of(fightDetails);
-        // fightDetails.map(FightInfo::getMobChoice).forEach(System.out::println);
-        // List<FightInfo> fino = fightDetails.stream().
-        // List<FightInfo> fino = fightDetails.stream().filter(FightInfo::isTrue).collect(Collectors.toList());
 
-        // fino.forEach(System.out::println);
-
-        Heroes heroes = Heroes.getHeroesInstance();
-        mageHP.setText("" + heroes.mageHitPoints);
-        warriorHP.setText("" + heroes.warriorHitPoints);
-        archerHP.setText("" + heroes.archerHitPoints);
-        attackerLabel.setText("" + mobChoice + " hits");
-        attackedLabel.setText("" + heroChoice);
-
-        CheckForMiss(damage);
+        
     }
 
     void CheckForMiss(int hitAmount){
@@ -346,7 +349,15 @@ public static void delay(long millis, Runnable continuation) {
     if (heroes.mageHitPoints < 1){
         mageOut = true;
         mage.setDisable(true);
-    } if (heroes)
+    } 
+    if (heroes.warriorHitPoints < 1){
+        warriorOut = true;
+        warrior.setDisable(warriorOut);
+    } 
+    if (heroes.archerHitPoints < 1){
+        archerOut = true;
+        archer.setDisable(archerOut);
+    }
   }
 
 

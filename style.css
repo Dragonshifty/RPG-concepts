@@ -1,0 +1,14 @@
+/* .button { 
+    -fx-background-color: red; 
+    -fx-text-fill: white; 
+ } */
+
+ #mobbutton{
+    -fx-background-color: darkslateblue; 
+    -fx-text-fill: white;
+ }
+
+ #herobutton{
+    -fx-background-color: green; 
+    -fx-text-fill: white;
+ }
